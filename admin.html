@@ -400,7 +400,7 @@ async function publish(){
     for(let i=0;i<pending.length;i++){
       const item=pending[i];
       statusEl.textContent=`Phase 1/2 · Uploading image ${i+1}/${pending.length}…`;
-      const uploaded=await requestJson("/.netlify/functions/upload-image",{
+      const uploaded=await requestJson("/api/upload-image",{
         image:item.image,
         day:item.di+1,
         stop:item.si+1,
@@ -412,7 +412,7 @@ async function publish(){
     }
 
     statusEl.textContent="Phase 2/2 · Saving itinerary…";
-    const r=await fetch("/.netlify/functions/save-itinerary",{
+    const r=await fetch("/api/save-itinerary",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify(db)

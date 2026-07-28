@@ -6,6 +6,24 @@ Files:
 - `data/itinerary.json` source of truth
 - `netlify/functions/save-itinerary.mjs` writes JSON back to GitHub
 - `netlify.toml` Netlify config
+- `api/*.mjs` Vercel Function routes
+- `vercel.json` Vercel config
+
+## Deploy to Vercel
+1. In Vercel, choose **Add New → Project** and import
+   `kloyeliang-hub/trip-to-china`.
+2. Keep **Root Directory** as the repository root.
+3. Choose **Other** as the Framework Preset. No build command is required.
+4. In **Environment Variables**, add these values for Production:
+   - `GITHUB_TOKEN`
+   - `GITHUB_OWNER` = `kloyeliang-hub`
+   - `GITHUB_REPO` = `trip-to-china`
+   - `GITHUB_BRANCH` = `main`
+5. The fine-grained GitHub token must be limited to this repository and have
+   **Contents: Read and write**.
+6. Deploy, then open `/admin.html` on the Vercel production domain.
+7. Every push to `main`, including saves from the editor, triggers a new Vercel
+   production deployment.
 
 ## Deploy
 1. Create a GitHub repository and upload the contents of this folder (not the outer ZIP folder).
