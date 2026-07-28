@@ -258,7 +258,9 @@
           "de": "Große Mauer bei Badaling",
           "lat": 40.3544,
           "lng": 116.0065,
-          "images": []
+          "images": [
+            "/assets/images/1785261950884-d4-s2-i1-八达岭长城.jpg"
+          ]
         },
         {
           "zh": "南锣鼓巷",
@@ -266,7 +268,9 @@
           "de": "Nanluoguxiang",
           "lat": 39.9372,
           "lng": 116.403,
-          "images": []
+          "images": [
+            "/assets/images/1785261953594-d4-s3-i1-南锣鼓巷.png"
+          ]
         },
         {
           "zh": "鼓楼",
@@ -274,7 +278,9 @@
           "de": "Trommelturm",
           "lat": 39.9409,
           "lng": 116.3967,
-          "images": []
+          "images": [
+            "/assets/images/1785261955755-d4-s4-i1-鼓楼.jpg"
+          ]
         },
         {
           "zh": "烟袋斜街",
@@ -282,7 +288,9 @@
           "de": "Yandai Xiejie",
           "lat": 39.94,
           "lng": 116.3917,
-          "images": []
+          "images": [
+            "/assets/images/1785261958128-d4-s5-i1-烟袋斜街.png"
+          ]
         },
         {
           "zh": "肆雅茉莉东方合院文化主题酒店",
@@ -315,7 +323,10 @@
           "de": "Hotel",
           "lat": 39.9287,
           "lng": 116.4209,
-          "images": []
+          "images": [
+            "/assets/images/1785261960128-d5-s1-i1-肆雅茉莉东方合院文化主题酒店.jpg",
+            "https://trip-to-china.netlify.app/assets/images/1785208805912-d2-s1-i2-%E8%82%86%E9%9B%85%E8%8C%89%E8%8E%89%E4%B8%9C%E6%96%B9%E5%90%88%E9%99%A2%E6%96%87%E5%8C%96%E4%B8%BB%E9%A2%98%E9%85%92%E5%BA%97.jpg"
+          ]
         },
         {
           "zh": "什刹海",
@@ -323,7 +334,9 @@
           "de": "Shichahai",
           "lat": 39.941,
           "lng": 116.385,
-          "images": []
+          "images": [
+            "/assets/images/1785261961920-d5-s2-i1-什刹海.jpg"
+          ]
         },
         {
           "zh": "恭王府博物馆",
@@ -331,7 +344,9 @@
           "de": "Prinz-Gong-Palastmuseum",
           "lat": 39.9372,
           "lng": 116.382,
-          "images": []
+          "images": [
+            "/assets/images/1785261963675-d5-s3-i1-恭王府博物馆.jpg"
+          ]
         },
         {
           "zh": "北海公园",
@@ -339,7 +354,9 @@
           "de": "Beihai-Park",
           "lat": 39.9254,
           "lng": 116.3881,
-          "images": []
+          "images": [
+            "/assets/images/1785261965873-d5-s4-i1-北海公园.png"
+          ]
         }
       ]
     }
