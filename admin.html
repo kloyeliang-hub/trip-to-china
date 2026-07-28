@@ -157,6 +157,9 @@ input{
 <script>
 let db;
 const preview=document.getElementById("preview");
+const appEl=document.getElementById("app");
+const statusEl=document.getElementById("status");
+const previewShellEl=document.getElementById("previewShell");
 
 async function load(){
   const r=await fetch("/data/itinerary.json?"+Date.now());
@@ -178,7 +181,7 @@ function sendPreview(){
 function changed(){sendPreview()}
 
 function renderEditor(){
-  app.innerHTML="";
+  appEl.innerHTML="";
   db.days.forEach((d,di)=>{
     const box=document.createElement("section");
     box.className="day";
@@ -195,7 +198,7 @@ function renderEditor(){
         <div id="stops-${di}" class="stop-list"></div>
         <button class="add" onclick="addStop(${di})">＋ Add Stop</button>
       </div>`;
-    app.appendChild(box);
+    appEl.appendChild(box);
     const list=box.querySelector("#stops-"+di);
     d.stops.forEach((s,si)=>list.appendChild(stopCard(di,si,s)));
   });
@@ -281,7 +284,7 @@ async function uploadImage(event,di,si,slot){
     return;
   }
   try{
-    status.textContent="Processing image…";
+    statusEl.textContent="Processing image…";
     const dataUrl=await resizeImage(file,1600,0.84);
     const stop=db.days[di].stops[si];
     if(!Array.isArray(stop.images))stop.images=[];
@@ -291,11 +294,11 @@ async function uploadImage(event,di,si,slot){
     renderEditor();changed();
     // reopen the same stop after rerender
     document.querySelectorAll(".day")[di]?.querySelectorAll(".stop-card")[si]?.classList.add("open");
-    status.textContent="Image ready ✓";
-    setTimeout(()=>status.textContent="",1500);
+    statusEl.textContent="Image ready ✓";
+    setTimeout(()=>statusEl.textContent="",1500);
   }catch(err){
     console.error(err);
-    status.textContent="Image error";
+    statusEl.textContent="Image error";
     alert("图片处理失败，请换一张 JPG / PNG / WebP。");
   }
 }
@@ -361,34 +364,48 @@ function esc(s){
 function device(type,btn){
   document.querySelectorAll(".device-group button").forEach(x=>x.classList.remove("active"));
   btn.classList.add("active");
-  previewShell.className="preview-shell"+(type==="desktop"?"":" "+type);
+  previewShellEl.className="preview-shell"+(type==="desktop"?"":" "+type);
 }
 function openSite(){window.open("/","_blank")}
 async function reloadFromGitHub(){
   if(!confirm("放弃当前未保存修改并重新读取线上版本？"))return;
-  status.textContent="Reloading…";
-  await load();
-  status.textContent="Reloaded";
-  setTimeout(()=>status.textContent="",1800);
-}
-async function publish(){
-  normalize();
-  status.textContent="Uploading images & saving…";
-  const r=await fetch("/.netlify/functions/save-itinerary",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(db)
-  });
-  const x=await r.json().catch(()=>({}));
-  if(r.ok){
-    if(x.itinerary) db=x.itinerary;
-    renderEditor();changed();
-    status.textContent=`Saved ✓ ${x.uploadedImages||0} image(s) uploaded. Netlify deploying…`;
-  }else{
-    status.textContent="Error: "+(x.error||r.status);
+  statusEl.textContent="Reloading…";
+  try{
+    await load();
+    statusEl.textContent="Reloaded";
+    setTimeout(()=>statusEl.textContent="",1800);
+  }catch(error){
+    statusEl.textContent="Reload failed: "+error.message;
   }
 }
-load();
+async function publish(){
+  if(!db){
+    statusEl.textContent="Error: itinerary has not loaded";
+    return;
+  }
+  normalize();
+  statusEl.textContent="Uploading images & saving…";
+  try{
+    const r=await fetch("/.netlify/functions/save-itinerary",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(db)
+    });
+    const x=await r.json().catch(()=>({}));
+    if(r.ok){
+      if(x.itinerary)db=x.itinerary;
+      renderEditor();changed();
+      statusEl.textContent=`Saved ✓ ${x.uploadedImages||0} image(s) uploaded. Netlify deploying…`;
+    }else{
+      statusEl.textContent="Error: "+(x.error||`HTTP ${r.status}`);
+    }
+  }catch(error){
+    statusEl.textContent="Save failed: "+error.message;
+  }
+}
+load().catch(error=>{
+  statusEl.textContent="Load failed: "+error.message;
+});
 </script>
 </body>
 </html>
