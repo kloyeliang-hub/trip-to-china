@@ -147,7 +147,7 @@ input{
 
     <div class="publish-note">
       上传图片后会先进入实时预览。点击 <b>Save & Publish</b> 时，
-      图片会和 <code>itinerary.json</code> 一起写入 GitHub，然后 Netlify 自动部署。
+      图片会逐张上传，最后再保存 <code>itinerary.json</code>，然后 Netlify 自动部署。
     </div>
 
     <div id="app"></div>
@@ -384,8 +384,31 @@ async function publish(){
     return;
   }
   normalize();
-  statusEl.textContent="Uploading images & saving…";
   try{
+    const pending=[];
+    db.days.forEach((day,di)=>day.stops.forEach((stop,si)=>
+      stop.images.forEach((image,slot)=>{
+        if(typeof image==="string"&&image.startsWith("data:image/")){
+          pending.push({di,si,slot,image,name:stop.zh});
+        }
+      })
+    ));
+
+    for(let i=0;i<pending.length;i++){
+      const item=pending[i];
+      statusEl.textContent=`Phase 1/2 · Uploading image ${i+1}/${pending.length}…`;
+      const uploaded=await requestJson("/.netlify/functions/upload-image",{
+        image:item.image,
+        day:item.di+1,
+        stop:item.si+1,
+        slot:item.slot+1,
+        name:item.name
+      });
+      db.days[item.di].stops[item.si].images[item.slot]=uploaded.path;
+      changed();
+    }
+
+    statusEl.textContent="Phase 2/2 · Saving itinerary…";
     const r=await fetch("/.netlify/functions/save-itinerary",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -395,13 +418,27 @@ async function publish(){
     if(r.ok){
       if(x.itinerary)db=x.itinerary;
       renderEditor();changed();
-      statusEl.textContent=`Saved ✓ ${x.uploadedImages||0} image(s) uploaded. Netlify deploying…`;
+      statusEl.textContent=`Saved ✓ ${pending.length} image(s) uploaded. Netlify deploying…`;
     }else{
       statusEl.textContent="Error: "+(x.error||`HTTP ${r.status}`);
     }
   }catch(error){
     statusEl.textContent="Save failed: "+error.message;
   }
+}
+async function requestJson(url,body){
+  const response=await fetch(url,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(body)
+  });
+  const text=await response.text();
+  let result={};
+  try{result=text?JSON.parse(text):{}}catch{}
+  if(!response.ok){
+    throw new Error(result.error||text||`HTTP ${response.status}`);
+  }
+  return result;
 }
 load().catch(error=>{
   statusEl.textContent="Load failed: "+error.message;
