@@ -147,7 +147,7 @@ input{
 
     <div class="publish-note">
       上传图片后会先进入实时预览。点击 <b>Save & Publish</b> 时，
-      图片会逐张上传，最后再保存 <code>itinerary.json</code>，然后 Netlify 自动部署。
+      图片会逐张上传，最后再保存 <code>itinerary.json</code>，然后 Vercel 自动部署。
     </div>
 
     <div id="app"></div>
@@ -421,7 +421,7 @@ async function publish(){
     if(r.ok){
       if(x.itinerary)db=x.itinerary;
       renderEditor();changed();
-      statusEl.textContent=`Saved ✓ ${pending.length} image(s) uploaded. Netlify deploying…`;
+      statusEl.textContent=`Saved ✓ ${pending.length} image(s) uploaded. Vercel deploying…`;
     }else{
       statusEl.textContent="Error: "+(x.error||`HTTP ${r.status}`);
     }
