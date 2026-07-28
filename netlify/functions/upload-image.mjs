@@ -55,25 +55,6 @@ export default async (req) => {
     };
     const apiBase = `https://api.github.com/repos/${owner}/${repo}`;
 
-    const refRes = await fetch(
-      `${apiBase}/git/ref/heads/${encodeURIComponent(branch)}`,
-      { headers }
-    );
-    if (!refRes.ok) {
-      return githubError("GitHub ref read failed", refRes);
-    }
-    const ref = await refRes.json();
-    const parentCommitSha = ref.object.sha;
-
-    const commitRes = await fetch(
-      `${apiBase}/git/commits/${parentCommitSha}`,
-      { headers }
-    );
-    if (!commitRes.ok) {
-      return githubError("GitHub commit read failed", commitRes);
-    }
-    const parentCommit = await commitRes.json();
-
     const blobRes = await fetch(`${apiBase}/git/blobs`, {
       method: "POST",
       headers,
@@ -84,50 +65,76 @@ export default async (req) => {
     }
     const blob = await blobRes.json();
 
-    const treeRes = await fetch(`${apiBase}/git/trees`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        base_tree: parentCommit.tree.sha,
-        tree: [{ path, mode: "100644", type: "blob", sha: blob.sha }]
-      })
-    });
-    if (!treeRes.ok) {
-      return githubError("GitHub image tree failed", treeRes);
-    }
-    const tree = await treeRes.json();
-
-    const newCommitRes = await fetch(`${apiBase}/git/commits`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        message: `Upload itinerary image for ${slug}`,
-        tree: tree.sha,
-        parents: [parentCommitSha]
-      })
-    });
-    if (!newCommitRes.ok) {
-      return githubError("GitHub image commit failed", newCommitRes);
-    }
-    const newCommit = await newCommitRes.json();
-
-    const updateRefRes = await fetch(
-      `${apiBase}/git/refs/heads/${encodeURIComponent(branch)}`,
-      {
-        method: "PATCH",
-        headers,
-        body: JSON.stringify({ sha: newCommit.sha, force: false })
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      const refRes = await fetch(
+        `${apiBase}/git/ref/heads/${encodeURIComponent(branch)}`,
+        { headers }
+      );
+      if (!refRes.ok) {
+        return githubError("GitHub ref read failed", refRes);
       }
-    );
-    if (!updateRefRes.ok) {
-      return githubError("GitHub image branch update failed", updateRefRes);
-    }
+      const ref = await refRes.json();
+      const parentCommitSha = ref.object.sha;
 
-    return Response.json({
-      ok: true,
-      path: `/${path}`,
-      commit: newCommit.sha
-    });
+      const commitRes = await fetch(
+        `${apiBase}/git/commits/${parentCommitSha}`,
+        { headers }
+      );
+      if (!commitRes.ok) {
+        return githubError("GitHub commit read failed", commitRes);
+      }
+      const parentCommit = await commitRes.json();
+
+      const treeRes = await fetch(`${apiBase}/git/trees`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          base_tree: parentCommit.tree.sha,
+          tree: [{ path, mode: "100644", type: "blob", sha: blob.sha }]
+        })
+      });
+      if (!treeRes.ok) {
+        return githubError("GitHub image tree failed", treeRes);
+      }
+      const tree = await treeRes.json();
+
+      const newCommitRes = await fetch(`${apiBase}/git/commits`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          message: `Upload itinerary image for ${slug}`,
+          tree: tree.sha,
+          parents: [parentCommitSha]
+        })
+      });
+      if (!newCommitRes.ok) {
+        return githubError("GitHub image commit failed", newCommitRes);
+      }
+      const newCommit = await newCommitRes.json();
+
+      const updateRefRes = await fetch(
+        `${apiBase}/git/refs/heads/${encodeURIComponent(branch)}`,
+        {
+          method: "PATCH",
+          headers,
+          body: JSON.stringify({ sha: newCommit.sha, force: false })
+        }
+      );
+      if (updateRefRes.ok) {
+        return Response.json({
+          ok: true,
+          path: `/${path}`,
+          commit: newCommit.sha,
+          attempts: attempt
+        });
+      }
+
+      if (updateRefRes.status !== 422 || attempt === 3) {
+        return githubError("GitHub image branch update failed", updateRefRes);
+      }
+
+      await updateRefRes.text();
+    }
   } catch (error) {
     console.error(error);
     return Response.json(

@@ -118,7 +118,7 @@ input{
     <span id="status" class="status"></span>
     <button class="ghost" onclick="reloadFromGitHub()">↻ Reload</button>
     <button class="primary" onclick="openSite()">Open Site</button>
-    <button class="save" onclick="publish()">Save & Publish</button>
+    <button id="saveButton" class="save" onclick="publish()">Save & Publish</button>
   </div>
 </div>
 
@@ -160,6 +160,7 @@ const preview=document.getElementById("preview");
 const appEl=document.getElementById("app");
 const statusEl=document.getElementById("status");
 const previewShellEl=document.getElementById("previewShell");
+const saveButtonEl=document.getElementById("saveButton");
 
 async function load(){
   const r=await fetch("/data/itinerary.json?"+Date.now());
@@ -379,10 +380,12 @@ async function reloadFromGitHub(){
   }
 }
 async function publish(){
+  if(saveButtonEl.disabled)return;
   if(!db){
     statusEl.textContent="Error: itinerary has not loaded";
     return;
   }
+  saveButtonEl.disabled=true;
   normalize();
   try{
     const pending=[];
@@ -424,6 +427,8 @@ async function publish(){
     }
   }catch(error){
     statusEl.textContent="Save failed: "+error.message;
+  }finally{
+    saveButtonEl.disabled=false;
   }
 }
 async function requestJson(url,body){
