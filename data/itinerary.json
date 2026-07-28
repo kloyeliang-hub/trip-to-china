@@ -115,7 +115,10 @@
           "de": "Hotel",
           "lat": 39.9287,
           "lng": 116.4209,
-          "images": []
+          "images": [
+            "/assets/images/1785208803446-d2-s1-i1-肆雅茉莉东方合院文化主题酒店.jpg",
+            "/assets/images/1785208805912-d2-s1-i2-肆雅茉莉东方合院文化主题酒店.jpg"
+          ]
         },
         {
           "zh": "天安门-城楼",
@@ -123,7 +126,9 @@
           "de": "Tian’anmen-Tor",
           "lat": 39.9075,
           "lng": 116.3975,
-          "images": []
+          "images": [
+            "/assets/images/1785208807895-d2-s2-i1-天安门-城楼.jpg"
+          ]
         },
         {
           "zh": "故宫博物院",
@@ -131,7 +136,9 @@
           "de": "Palastmuseum / Verbotene Stadt",
           "lat": 39.9163,
           "lng": 116.3972,
-          "images": []
+          "images": [
+            "/assets/images/1785208809972-d2-s3-i1-故宫博物院.jpg"
+          ]
         },
         {
           "zh": "景山公园",
@@ -139,7 +146,9 @@
           "de": "Jingshan-Park",
           "lat": 39.925,
           "lng": 116.3966,
-          "images": []
+          "images": [
+            "/assets/images/1785208811973-d2-s4-i1-景山公园.jpg"
+          ]
         },
         {
           "zh": "肆雅茉莉东方合院文化主题酒店",
@@ -147,7 +156,10 @@
           "de": "Hotel",
           "lat": 39.9287,
           "lng": 116.4209,
-          "images": []
+          "images": [
+            "/assets/images/1785208813993-d2-s5-i1-肆雅茉莉东方合院文化主题酒店.jpg",
+            "/assets/images/1785208816121-d2-s5-i2-肆雅茉莉东方合院文化主题酒店.jpg"
+          ]
         }
       ]
     },
