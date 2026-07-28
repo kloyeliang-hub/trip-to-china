@@ -40,7 +40,8 @@
           "lat": 39.9287,
           "lng": 116.4209,
           "images": [
-            "/assets/images/1785206365588-d1-s1-i1-肆雅茉莉东方合院文化主题酒店.jpg"
+            "/assets/images/1785206365588-d1-s1-i1-肆雅茉莉东方合院文化主题酒店.jpg",
+            "/assets/images/1785207057758-d1-s1-i2-肆雅茉莉东方合院文化主题酒店.jpg"
           ]
         },
         {
@@ -49,7 +50,9 @@
           "de": "Große Halle des Volkes",
           "lat": 39.9036,
           "lng": 116.3878,
-          "images": []
+          "images": [
+            "/assets/images/1785207061318-d1-s2-i1-人民大会堂.jpg"
+          ]
         },
         {
           "zh": "天安门",
@@ -57,7 +60,9 @@
           "de": "Tian’anmen",
           "lat": 39.9075,
           "lng": 116.3975,
-          "images": []
+          "images": [
+            "/assets/images/1785207063255-d1-s3-i1-天安门.jpg"
+          ]
         },
         {
           "zh": "四季民福（故宫店）",
@@ -65,7 +70,9 @@
           "de": "Siji Minfu",
           "lat": 39.9188,
           "lng": 116.407,
-          "images": []
+          "images": [
+            "/assets/images/1785207065035-d1-s4-i1-四季民福-故宫店.jpg"
+          ]
         },
         {
           "zh": "王府井步行街",
@@ -73,7 +80,9 @@
           "de": "Wangfujing-Fußgängerzone",
           "lat": 39.9146,
           "lng": 116.4126,
-          "images": []
+          "images": [
+            "/assets/images/1785207066875-d1-s5-i1-王府井步行街.jpg"
+          ]
         },
         {
           "zh": "肆雅茉莉东方合院文化主题酒店",
@@ -81,7 +90,10 @@
           "de": "Hotel",
           "lat": 39.9287,
           "lng": 116.4209,
-          "images": []
+          "images": [
+            "/assets/images/1785207068632-d1-s6-i1-肆雅茉莉东方合院文化主题酒店.jpg",
+            "/assets/images/1785207070473-d1-s6-i2-肆雅茉莉东方合院文化主题酒店.jpg"
+          ]
         }
       ]
     },
