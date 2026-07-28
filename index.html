@@ -27,4 +27,10 @@ function drawFilters(){filters.innerHTML="";let a=document.createElement("button
 function show(i,b){document.querySelectorAll(".filters button").forEach(x=>x.classList.remove("active"));b.classList.add("active");let pts=[];layers.forEach((g,n)=>{if(i===null||i===n){g.addTo(map);DB.days[n].stops.forEach(s=>pts.push([s.lat,s.lng]))}else map.removeLayer(g)});map.fitBounds(pts,{padding:[25,25]})}
 document.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{lang=b.dataset.l;document.querySelectorAll("[data-l]").forEach(x=>x.classList.toggle("active",x===b));render()});
 fetch("/data/itinerary.json?"+Date.now()).then(r=>r.json()).then(x=>{DB=x;render()});
+
+window.addEventListener("message",(event)=>{
+  if(!event.data || event.data.type!=="itinerary-preview") return;
+  DB=event.data.payload;
+  render();
+});
 </script></body></html>

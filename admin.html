@@ -1,20 +1,286 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Beijing Trip Editor</title>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Beijing Trip Visual Editor</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f4f1eb;color:#222;font-family:Inter,"PingFang SC","Microsoft YaHei",Arial,sans-serif}.top{position:sticky;top:0;z-index:5;background:#3f2e29;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}.top h1{font-size:20px;margin:0}.actions{display:flex;gap:8px}button{border:0;border-radius:10px;padding:9px 13px;cursor:pointer;font-weight:700}.primary{background:#fff;color:#3f2e29}.save{background:#b9e769}.wrap{max-width:1000px;margin:24px auto;padding:0 16px}.day{background:#fff;border:1px solid #ddd5ca;border-radius:18px;padding:18px;margin-bottom:16px}.row{display:grid;grid-template-columns:40px 1fr 1fr 1fr 110px 110px 70px;gap:8px;align-items:center;padding:9px 0;border-top:1px solid #eee}.row:first-of-type{border-top:0}.handle{cursor:grab;font-size:20px;text-align:center}.row input,.day input{width:100%;padding:9px;border:1px solid #d8d0c5;border-radius:8px}.dayhead{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}.small{font-size:12px;color:#777}.danger{background:#ffe1df}.add{margin-top:10px;background:#eee}.status{font-size:13px}.login{max-width:480px;margin:60px auto;background:#fff;padding:24px;border-radius:18px;border:1px solid #ddd5ca}.login input{width:100%;padding:11px;margin:6px 0 12px;border:1px solid #ccc;border-radius:9px}
-@media(max-width:850px){.row{grid-template-columns:35px 1fr}.row input,.row button{grid-column:2}.dayhead{grid-template-columns:1fr}}
-</style></head><body>
-<div class="top"><h1>北京行程 Visual Editor</h1><div class="actions"><span id="status" class="status"></span><button class="primary" onclick="preview()">Preview</button><button class="save" onclick="publish()">Save & Publish</button></div></div>
-<div id="app" class="wrap"></div>
+:root{
+  --bg:#efede8;--panel:#fff;--ink:#202124;--muted:#77716a;--line:#ddd7ce;
+  --brand:#3f2e29;--green:#b9e769;--danger:#fff0ee;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:Inter,"PingFang SC","Microsoft YaHei",Arial,sans-serif;
+  overflow:hidden;
+}
+.top{
+  height:64px;background:var(--brand);color:#fff;padding:0 18px;
+  display:flex;justify-content:space-between;align-items:center;gap:14px;
+}
+.top h1{font-size:18px;margin:0}
+.actions{display:flex;align-items:center;gap:8px}
+button{
+  border:0;border-radius:10px;padding:9px 12px;cursor:pointer;font-weight:700;
+}
+.primary{background:#fff;color:var(--brand)}
+.save{background:var(--green);color:#1e2b13}
+.ghost{background:#ffffff18;color:#fff}
+.status{font-size:12px;opacity:.85;max-width:220px}
+.workspace{
+  height:calc(100vh - 64px);
+  display:grid;grid-template-columns:minmax(420px,1fr) 430px;
+}
+.preview-panel{
+  min-width:0;padding:14px;border-right:1px solid var(--line);
+  display:flex;flex-direction:column;gap:10px;
+}
+.preview-head{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  color:var(--muted);font-size:13px;
+}
+.device-group{display:flex;gap:5px}
+.device-group button{padding:6px 9px;background:#fff;border:1px solid var(--line)}
+.device-group button.active{background:#222;color:#fff}
+.canvas{
+  flex:1;min-height:0;background:#d8d4cc;border-radius:16px;padding:14px;
+  display:flex;justify-content:center;align-items:stretch;overflow:hidden;
+}
+.preview-shell{
+  width:100%;height:100%;background:#fff;border-radius:12px;
+  overflow:hidden;box-shadow:0 10px 30px #0002;transition:.2s width ease;
+}
+.preview-shell.tablet{width:820px}
+.preview-shell.mobile{width:390px}
+iframe{width:100%;height:100%;border:0;background:#fff}
+
+.editor-panel{
+  background:#f8f7f4;overflow:auto;padding:15px;
+}
+.editor-title{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:12px
+}
+.editor-title h2{font-size:18px;margin:0}
+.hint{font-size:12px;color:var(--muted)}
+
+.day{
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  margin-bottom:12px;overflow:hidden;
+}
+.day-summary{
+  padding:14px;display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;background:#fff;
+}
+.day-summary strong{font-size:15px}
+.day-summary span{color:var(--muted);font-size:12px}
+.day-body{padding:0 14px 14px}
+.day.collapsed .day-body{display:none}
+.fields{display:grid;grid-template-columns:1fr;gap:7px;margin-bottom:12px}
+label{font-size:11px;color:var(--muted);display:block;margin-bottom:4px}
+input{
+  width:100%;padding:9px 10px;border:1px solid #d7d1c7;border-radius:9px;
+  background:#fff;font:inherit;
+}
+.stop-list{display:flex;flex-direction:column;gap:8px}
+.stop-card{
+  border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px;
+}
+.stop-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.handle{cursor:grab;font-size:20px;color:#837a70;user-select:none}
+.stop-number{
+  width:25px;height:25px;border-radius:50%;background:#eee9ff;color:#684ee8;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;
+}
+.stop-name{flex:1;font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{padding:5px 8px;background:#f3f1ed;color:#555}
+.icon-btn.danger{background:var(--danger);color:#b5362e}
+.stop-fields{display:none;grid-template-columns:1fr;gap:7px;padding-top:4px}
+.stop-card.open .stop-fields{display:grid}
+.coords{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.add{width:100%;margin-top:9px;background:#ece8e1;color:#423a34}
+.publish-note{
+  background:#fff8dd;border:1px solid #eadb99;border-radius:12px;padding:10px;
+  font-size:12px;line-height:1.5;color:#685c29;margin-bottom:12px
+}
+@media(max-width:1000px){
+  body{overflow:auto}
+  .workspace{height:auto;grid-template-columns:1fr}
+  .preview-panel{height:70vh;border-right:0;border-bottom:1px solid var(--line)}
+  .editor-panel{overflow:visible}
+}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>北京行程 Visual Editor</h1>
+  <div class="actions">
+    <span id="status" class="status"></span>
+    <button class="ghost" onclick="reloadFromGitHub()">↻ Reload</button>
+    <button class="primary" onclick="openSite()">Open Site</button>
+    <button class="save" onclick="publish()">Save & Publish</button>
+  </div>
+</div>
+
+<div class="workspace">
+  <section class="preview-panel">
+    <div class="preview-head">
+      <span>实时 Preview — 修改右侧内容后立即更新</span>
+      <div class="device-group">
+        <button class="active" onclick="device('desktop',this)">Desktop</button>
+        <button onclick="device('tablet',this)">Tablet</button>
+        <button onclick="device('mobile',this)">Mobile</button>
+      </div>
+    </div>
+    <div class="canvas">
+      <div id="previewShell" class="preview-shell">
+        <iframe id="preview" src="/"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <aside class="editor-panel">
+    <div class="editor-title">
+      <h2>行程内容</h2>
+      <span class="hint">拖动 ☰ 调整顺序</span>
+    </div>
+
+    <div class="publish-note">
+      右侧修改只会先更新预览。点击 <b>Save & Publish</b> 后才会写回 GitHub，
+      然后 Netlify 自动重新部署。
+    </div>
+
+    <div id="app"></div>
+  </aside>
+</div>
+
 <script>
 let db;
-async function load(){let r=await fetch("/data/itinerary.json?"+Date.now());db=await r.json();render()}
-function render(){app.innerHTML="";db.days.forEach((d,di)=>{let box=document.createElement("section");box.className="day";box.innerHTML=`<div class="dayhead"><input value="${esc(d.date.zh)}" onchange="db.days[${di}].date.zh=this.value" placeholder="中文日期"><input value="${esc(d.date.fa)}" onchange="db.days[${di}].date.fa=this.value" placeholder="Persian date"><input value="${esc(d.date.de)}" onchange="db.days[${di}].date.de=this.value" placeholder="German date"></div><div id="stops-${di}"></div><button class="add" onclick="addStop(${di})">+ Add Stop</button>`;app.appendChild(box);let list=box.querySelector("#stops-"+di);d.stops.forEach((s,si)=>list.appendChild(row(di,si,s)))})}
-function row(di,si,s){let e=document.createElement("div");e.className="row";e.draggable=true;e.dataset.index=si;e.innerHTML=`<div class="handle">☰</div><input value="${esc(s.zh)}" onchange="db.days[${di}].stops[${si}].zh=this.value" placeholder="中文"><input value="${esc(s.fa)}" onchange="db.days[${di}].stops[${si}].fa=this.value" placeholder="فارسی"><input value="${esc(s.de)}" onchange="db.days[${di}].stops[${si}].de=this.value" placeholder="Deutsch"><input type="number" step="any" value="${s.lat}" onchange="db.days[${di}].stops[${si}].lat=+this.value" placeholder="Lat"><input type="number" step="any" value="${s.lng}" onchange="db.days[${di}].stops[${si}].lng=+this.value" placeholder="Lng"><button class="danger" onclick="del(${di},${si})">Delete</button>`;
- e.ondragstart=ev=>ev.dataTransfer.setData("text/plain",si);e.ondragover=ev=>ev.preventDefault();e.ondrop=ev=>{ev.preventDefault();let from=+ev.dataTransfer.getData("text/plain"),to=si;if(from!==to){let x=db.days[di].stops.splice(from,1)[0];db.days[di].stops.splice(to,0,x);render()}};return e}
-function esc(s){return String(s??"").replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;")}
-function addStop(di){db.days[di].stops.push({zh:"新地点",fa:"مکان جدید",de:"Neuer Ort",lat:39.9042,lng:116.4074});render()}
-function del(di,si){db.days[di].stops.splice(si,1);render()}
-function preview(){localStorage.setItem("itinerary-preview",JSON.stringify(db));window.open("/","_blank")}
-async function publish(){status.textContent="Saving…";let r=await fetch("/.netlify/functions/save-itinerary",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(db)});let x=await r.json().catch(()=>({}));status.textContent=r.ok?"Saved. Netlify is deploying…":("Error: "+(x.error||r.status));}
+const preview=document.getElementById("preview");
+
+async function load(){
+  const r=await fetch("/data/itinerary.json?"+Date.now());
+  db=await r.json();
+  renderEditor();
+  preview.addEventListener("load",sendPreview,{once:true});
+}
+function sendPreview(){
+  if(!db) return;
+  preview.contentWindow.postMessage({type:"itinerary-preview",payload:db},"*");
+}
+function changed(){sendPreview();}
+
+function renderEditor(){
+  app.innerHTML="";
+  db.days.forEach((d,di)=>{
+    const box=document.createElement("section");
+    box.className="day";
+    box.innerHTML=`
+      <div class="day-summary" onclick="this.parentElement.classList.toggle('collapsed')">
+        <div><strong>${esc(d.date.zh)} · ${esc(d.theme.zh)}</strong><br><span>${d.stops.length} 个节点</span></div>
+        <span>展开 / 收起</span>
+      </div>
+      <div class="day-body">
+        <div class="fields">
+          ${triField("日期",d.date,`db.days[${di}].date`)}
+          ${triField("主题",d.theme,`db.days[${di}].theme`)}
+        </div>
+        <div id="stops-${di}" class="stop-list"></div>
+        <button class="add" onclick="addStop(${di})">＋ Add Stop</button>
+      </div>`;
+    app.appendChild(box);
+    const list=box.querySelector("#stops-"+di);
+    d.stops.forEach((s,si)=>list.appendChild(stopCard(di,si,s)));
+  });
+}
+function triField(label,obj,path){
+  return `<div>
+    <label>${label} · 中文</label>
+    <input value="${esc(obj.zh)}" oninput="${path}.zh=this.value;changed()">
+    <label style="margin-top:6px">${label} · فارسی</label>
+    <input value="${esc(obj.fa)}" oninput="${path}.fa=this.value;changed()">
+    <label style="margin-top:6px">${label} · Deutsch</label>
+    <input value="${esc(obj.de)}" oninput="${path}.de=this.value;changed()">
+  </div>`;
+}
+function stopCard(di,si,s){
+  const e=document.createElement("div");
+  e.className="stop-card";
+  e.draggable=true;
+  e.dataset.index=si;
+  e.innerHTML=`
+    <div class="stop-top">
+      <div class="handle">☰</div>
+      <div class="stop-number">${si+1}</div>
+      <div class="stop-name">${esc(s.zh)}</div>
+      <button class="icon-btn" onclick="event.stopPropagation();this.closest('.stop-card').classList.toggle('open')">Edit</button>
+      <button class="icon-btn danger" onclick="event.stopPropagation();delStop(${di},${si})">×</button>
+    </div>
+    <div class="stop-fields">
+      <div><label>中文</label><input value="${esc(s.zh)}" oninput="db.days[${di}].stops[${si}].zh=this.value;this.closest('.stop-card').querySelector('.stop-name').textContent=this.value;changed()"></div>
+      <div><label>فارسی</label><input value="${esc(s.fa)}" oninput="db.days[${di}].stops[${si}].fa=this.value;changed()"></div>
+      <div><label>Deutsch</label><input value="${esc(s.de)}" oninput="db.days[${di}].stops[${si}].de=this.value;changed()"></div>
+      <div class="coords">
+        <div><label>Latitude</label><input type="number" step="any" value="${s.lat}" oninput="db.days[${di}].stops[${si}].lat=+this.value;changed()"></div>
+        <div><label>Longitude</label><input type="number" step="any" value="${s.lng}" oninput="db.days[${di}].stops[${si}].lng=+this.value;changed()"></div>
+      </div>
+    </div>`;
+  e.ondragstart=ev=>{
+    ev.dataTransfer.effectAllowed="move";
+    ev.dataTransfer.setData("text/plain",si);
+  };
+  e.ondragover=ev=>{ev.preventDefault();ev.dataTransfer.dropEffect="move"};
+  e.ondrop=ev=>{
+    ev.preventDefault();
+    const from=+ev.dataTransfer.getData("text/plain"),to=si;
+    if(from===to) return;
+    const moved=db.days[di].stops.splice(from,1)[0];
+    db.days[di].stops.splice(to,0,moved);
+    renderEditor();changed();
+  };
+  return e;
+}
+function addStop(di){
+  db.days[di].stops.push({zh:"新地点",fa:"مکان جدید",de:"Neuer Ort",lat:39.9042,lng:116.4074});
+  renderEditor();changed();
+}
+function delStop(di,si){
+  if(!confirm("删除这个地点？")) return;
+  db.days[di].stops.splice(si,1);
+  renderEditor();changed();
+}
+function esc(s){
+  return String(s??"").replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;");
+}
+function device(type,btn){
+  document.querySelectorAll(".device-group button").forEach(x=>x.classList.remove("active"));
+  btn.classList.add("active");
+  previewShell.className="preview-shell"+(type==="desktop"?"":" "+type);
+}
+function openSite(){window.open("/","_blank")}
+async function reloadFromGitHub(){
+  if(!confirm("放弃当前未保存修改并重新读取 GitHub / Netlify 上的版本？")) return;
+  status.textContent="Reloading…";
+  await load();
+  status.textContent="Reloaded";
+  setTimeout(()=>status.textContent="",1800);
+}
+async function publish(){
+  status.textContent="Saving…";
+  const r=await fetch("/.netlify/functions/save-itinerary",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(db)
+  });
+  const x=await r.json().catch(()=>({}));
+  if(r.ok){
+    status.textContent="Saved ✓ Netlify deploying…";
+  }else{
+    status.textContent="Error: "+(x.error||r.status);
+  }
+}
 load();
-</script></body></html>
+</script>
+</body>
+</html>
