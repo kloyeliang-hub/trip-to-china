@@ -170,9 +170,13 @@ async function load(){
   preview.addEventListener("load",sendPreview,{once:true});
 }
 function normalize(){
+  if(!db.introductions||typeof db.introductions!=="object")db.introductions={};
   db.days.forEach(day=>day.stops.forEach(stop=>{
     if(!Array.isArray(stop.images))stop.images=[];
     stop.images=stop.images.slice(0,2);
+    if(!db.introductions[stop.zh]){
+      db.introductions[stop.zh]={zh:"",fa:"",de:""};
+    }
   }));
 }
 function sendPreview(){
@@ -214,6 +218,19 @@ function triField(label,obj,path){
     <input value="${esc(obj.de)}" oninput="${path}.de=this.value;changed()">
   </div>`;
 }
+function introFor(di,si){
+  const name=db.days[di].stops[si].zh;
+  if(!db.introductions[name])db.introductions[name]={zh:"",fa:"",de:""};
+  return db.introductions[name];
+}
+function renameStop(di,si,value){
+  const stop=db.days[di].stops[si];
+  const previous=stop.zh;
+  if(previous!==value&&!db.introductions[value]){
+    db.introductions[value]=db.introductions[previous]||{zh:"",fa:"",de:""};
+  }
+  stop.zh=value;
+}
 function slotHtml(di,si,slot,s){
   const src=(s.images||[])[slot]||"";
   const has=!!src;
@@ -253,9 +270,12 @@ function stopCard(di,si,s){
           ${slotHtml(di,si,1,s)}
         </div>
       </div>
-      <div><label>中文</label><input value="${esc(s.zh)}" oninput="db.days[${di}].stops[${si}].zh=this.value;this.closest('.stop-card').querySelector('.stop-name').textContent=this.value;changed()"></div>
+      <div><label>中文</label><input value="${esc(s.zh)}" oninput="renameStop(${di},${si},this.value);this.closest('.stop-card').querySelector('.stop-name').textContent=this.value;changed()"></div>
       <div><label>فارسی</label><input value="${esc(s.fa)}" oninput="db.days[${di}].stops[${si}].fa=this.value;changed()"></div>
       <div><label>Deutsch</label><input value="${esc(s.de)}" oninput="db.days[${di}].stops[${si}].de=this.value;changed()"></div>
+      <div class="fields">
+        ${triField("一行介绍",db.introductions[s.zh],`introFor(${di},${si})`)}
+      </div>
       <div class="coords">
         <div><label>Latitude</label><input type="number" step="any" value="${s.lat}" oninput="db.days[${di}].stops[${si}].lat=+this.value;changed()"></div>
         <div><label>Longitude</label><input type="number" step="any" value="${s.lng}" oninput="db.days[${di}].stops[${si}].lng=+this.value;changed()"></div>
@@ -352,6 +372,7 @@ function trimImages(stop){
 }
 function addStop(di){
   db.days[di].stops.push({zh:"新地点",fa:"مکان جدید",de:"Neuer Ort",lat:39.9042,lng:116.4074,images:[]});
+  if(!db.introductions["新地点"])db.introductions["新地点"]={zh:"",fa:"",de:""};
   renderEditor();changed();
 }
 function delStop(di,si){

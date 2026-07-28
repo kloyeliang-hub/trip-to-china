@@ -40,6 +40,9 @@ main{max-width:1200px;margin:auto;padding:24px 20px}
 }
 .stop:first-of-type{border-top:0}
 .stop-copy{min-width:0}
+.stop-intro{
+  color:var(--muted);font-size:13px;line-height:1.45;margin-top:5px
+}
 .stop-media{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .stop-media.one{grid-template-columns:1fr}
 .stop-media img{
@@ -121,7 +124,10 @@ function render(){
       <div class="theme">${escapeAttr(d.theme[lang])}</div>
       ${d.stops.map((s,i)=>`
         <div class="stop">
-          <div class="stop-copy"><b>${i+1}. ${escapeAttr(s[lang])}</b></div>
+          <div class="stop-copy">
+            <b>${i+1}. ${escapeAttr(s[lang])}</b>
+            ${DB.introductions?.[s.zh]?.[lang]?`<div class="stop-intro">${escapeAttr(DB.introductions[s.zh][lang])}</div>`:""}
+          </div>
           ${stopMedia(s)}
         </div>`).join("")}
       <div class="route">${lang==="zh"?"路线：":lang==="fa"?"مسیر: ":"Route: "}${d.stops.map(s=>escapeAttr(s[lang])).join(" → ")}</div>`;

@@ -20,6 +20,98 @@
     "lat": 39.9287,
     "lng": 116.4209
   },
+  "introductions": {
+    "肆雅茉莉东方合院文化主题酒店": {
+      "zh": "融合传统合院氛围与现代舒适体验的文化主题酒店。",
+      "fa": "هتلی فرهنگی با حال‌وهوای حیاط سنتی و امکانات مدرن.",
+      "de": "Ein Kulturhotel, das traditionelle Hofhaus-Atmosphäre mit modernem Komfort verbindet."
+    },
+    "人民大会堂": {
+      "zh": "中国重要国务活动和大型会议举行地，建筑庄严宏伟。",
+      "fa": "محل برگزاری رویدادهای مهم دولتی و نشست‌های بزرگ با معماری باشکوه.",
+      "de": "Schauplatz wichtiger Staatsakte und großer Tagungen mit monumentaler Architektur."
+    },
+    "天安门": {
+      "zh": "北京城市中轴线上的标志性城门，也是中国的重要象征。",
+      "fa": "دروازه‌ای نمادین بر محور مرکزی پکن و یکی از مهم‌ترین نمادهای چین.",
+      "de": "Das ikonische Tor an Pekings Zentralachse und eines der wichtigsten Symbole Chinas."
+    },
+    "四季民福（故宫店）": {
+      "zh": "以北京烤鸭闻名，可在用餐时感受老北京风味。",
+      "fa": "رستورانی مشهور برای اردک پکنی و تجربه طعم‌های سنتی پکن.",
+      "de": "Ein für Pekingente bekanntes Restaurant mit klassischen Aromen der Hauptstadt."
+    },
+    "王府井步行街": {
+      "zh": "北京著名商业街，汇集老字号、商场与特色小吃。",
+      "fa": "خیابان خرید معروف پکن با فروشگاه‌های قدیمی، مراکز خرید و خوراکی‌های محلی.",
+      "de": "Pekings berühmte Einkaufsstraße mit Traditionsläden, Kaufhäusern und lokalen Snacks."
+    },
+    "天安门-城楼": {
+      "zh": "登临城楼可近距离欣赏古建筑，并俯瞰天安门广场。",
+      "fa": "از بالای برج می‌توان معماری تاریخی و میدان تیان‌آن‌من را تماشا کرد.",
+      "de": "Vom Torturm lassen sich die historische Architektur und der Tian’anmen-Platz überblicken."
+    },
+    "故宫博物院": {
+      "zh": "明清两代皇家宫殿群，珍藏丰富文物与宫廷建筑。",
+      "fa": "مجموعه کاخ‌های سلطنتی مینگ و چینگ با گنجینه‌ای از آثار تاریخی.",
+      "de": "Der Kaiserpalast der Ming- und Qing-Dynastien mit reichen Kunstschätzen und Palastarchitektur."
+    },
+    "景山公园": {
+      "zh": "登上万春亭可俯瞰故宫全景和北京中轴线。",
+      "fa": "از عمارت وان‌چون چشم‌اندازی کامل به شهر ممنوعه و محور مرکزی پکن دیده می‌شود.",
+      "de": "Vom Wanchun-Pavillon bietet sich ein Panoramablick auf die Verbotene Stadt und Pekings Zentralachse."
+    },
+    "天坛公园": {
+      "zh": "明清皇帝祭天祈谷之地，以祈年殿和精巧声学闻名。",
+      "fa": "محل نیایش امپراتوران مینگ و چینگ، مشهور به تالار نیایش برای برداشت خوب.",
+      "de": "Kaiserliche Opferstätte der Ming- und Qing-Zeit, berühmt für die Halle des Erntegebets."
+    },
+    "颐和园": {
+      "zh": "以昆明湖和万寿山为核心的皇家园林，山水景观秀美。",
+      "fa": "باغ سلطنتی زیبایی پیرامون دریاچه کون‌مینگ و تپه طول عمر.",
+      "de": "Ein kaiserlicher Landschaftsgarten rund um den Kunming-See und den Berg der Langlebigkeit."
+    },
+    "鸟巢文化中心": {
+      "zh": "北京奥运会标志性场馆，以独特钢结构和夜景著称。",
+      "fa": "ورزشگاه نمادین المپیک پکن، مشهور به سازه فولادی ویژه و نورپردازی شبانه.",
+      "de": "Das ikonische Olympiastadion Pekings, bekannt für seine Stahlstruktur und nächtliche Beleuchtung."
+    },
+    "八达岭长城": {
+      "zh": "保存完善的明长城代表段落，可远眺连绵群山与敌楼。",
+      "fa": "بخشی حفاظت‌شده از دیوار بزرگ مینگ با چشم‌انداز کوه‌ها و برج‌های دیده‌بانی.",
+      "de": "Ein gut erhaltener Abschnitt der Ming-Mauer mit weitem Blick auf Berge und Wachtürme."
+    },
+    "南锣鼓巷": {
+      "zh": "穿行胡同与四合院之间，感受老北京街区的生活气息。",
+      "fa": "کوچه‌ای تاریخی میان هوتونگ‌ها و خانه‌های حیاط‌دار با حال‌وهوای پکن قدیم.",
+      "de": "Eine historische Gasse zwischen Hutongs und Hofhäusern mit lebendiger Alt-Peking-Atmosphäre."
+    },
+    "鼓楼": {
+      "zh": "元明清时期的报时建筑，是北京中轴线北段的重要地标。",
+      "fa": "برج تاریخی اعلام زمان و یکی از نشانه‌های مهم بخش شمالی محور مرکزی پکن.",
+      "de": "Historischer Zeitmeldeturm und bedeutendes Wahrzeichen im Norden der Pekinger Zentralachse."
+    },
+    "烟袋斜街": {
+      "zh": "短小而古朴的商业胡同，适合散步、寻访小店与手作。",
+      "fa": "هوتونگی کوتاه و قدیمی، مناسب قدم‌زدن و دیدن مغازه‌ها و صنایع‌دستی.",
+      "de": "Eine kurze historische Geschäftsgasse, ideal zum Bummeln zwischen kleinen Läden und Kunsthandwerk."
+    },
+    "什刹海": {
+      "zh": "由湖泊、胡同和历史建筑组成，是体验北京慢生活的好去处。",
+      "fa": "منطقه‌ای از دریاچه‌ها، هوتونگ‌ها و بناهای تاریخی برای تجربه زندگی آرام پکن.",
+      "de": "Ein Viertel aus Seen, Hutongs und historischen Bauten – ideal für Pekings entspannte Seite."
+    },
+    "恭王府博物馆": {
+      "zh": "清代规模宏大的王府宅邸，以精美院落和后花园闻名。",
+      "fa": "عمارت بزرگ شاهزاده‌ای از دوره چینگ، مشهور به حیاط‌ها و باغ زیبایش.",
+      "de": "Eine weitläufige Qing-Prinzenresidenz, berühmt für elegante Höfe und ihren Garten."
+    },
+    "北海公园": {
+      "zh": "历史悠久的皇家园林，以白塔、琼华岛和湖景著称。",
+      "fa": "باغ سلطنتی تاریخی، مشهور به پاگودای سفید، جزیره چیونگ‌هوا و منظره دریاچه.",
+      "de": "Ein historischer Kaiserpark, bekannt für die Weiße Pagode, die Qionghua-Insel und den See."
+    }
+  },
   "days": [
     {
       "date": {
