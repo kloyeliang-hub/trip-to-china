@@ -1,31 +1,182 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Beijing Trip</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Beijing Trip</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
-:root{--bg:#f7f4ee;--card:#fffdf9;--ink:#1d1b18;--muted:#706a61;--line:#ded7cc;--gold:#b58a46}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,"PingFang SC","Microsoft YaHei",Tahoma,Arial,sans-serif;color:var(--ink)}body.rtl{direction:rtl}
-header{background:linear-gradient(135deg,#4b342d,#7a4b3f);color:#fff;padding:38px 22px}.head{max-width:1200px;margin:auto;display:flex;justify-content:space-between;gap:20px;align-items:center}
-h1{margin:0;font-size:clamp(32px,5vw,58px)}#subtitle{opacity:.8;margin-top:8px}.langs{display:flex;gap:7px}.langs button,.filters button{border:0;border-radius:999px;padding:9px 13px;cursor:pointer}.langs button.active{background:#fff;color:#4b342d}.langs button{background:#ffffff20;color:#fff}
-main{max-width:1200px;margin:auto;padding:24px 20px}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}.cards{display:flex;flex-direction:column;gap:16px}.card,.mapbox{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 10px 28px #33271912}
-.card h2{margin:0}.theme{color:var(--muted);margin:4px 0 14px}.stop{padding:11px 0;border-top:1px solid var(--line)}.route{margin-top:12px;background:#f6f1e8;padding:12px;border-left:4px solid var(--gold);border-radius:10px}.rtl .route{border-left:0;border-right:4px solid var(--gold)}
-.mapbox{position:sticky;top:16px}.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.filters button.active{background:#1d1b18;color:#fff}#map{height:650px;border-radius:14px}
-@media(max-width:850px){.grid{grid-template-columns:1fr}.mapbox{position:relative}#map{height:450px}.head{align-items:flex-start;flex-direction:column}}
-</style></head><body>
-<header><div class="head"><div><h1 id="title"></h1><div id="subtitle"></div></div><div class="langs"><button data-l="zh" class="active">中文</button><button data-l="fa">فارسی</button><button data-l="de">Deutsch</button></div></div></header>
-<main><div class="grid"><section id="cards" class="cards"></section><aside class="mapbox"><div id="filters" class="filters"></div><div id="map"></div></aside></div></main>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
-let DB,lang="zh",layers=[];const colors=["#28a9e0","#ff9b42","#7367f0","#59b300","#b064e8"];
-const map=L.map("map");L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"&copy; OpenStreetMap contributors"}).addTo(map);
-function render(){
- document.documentElement.lang=lang==="fa"?"fa":lang==="de"?"de":"zh-CN";document.documentElement.dir=lang==="fa"?"rtl":"ltr";document.body.classList.toggle("rtl",lang==="fa");
- title.textContent=DB.site.title[lang];subtitle.textContent=DB.site.subtitle[lang];cards.innerHTML="";
- DB.days.forEach((d,di)=>{let e=document.createElement("article");e.className="card";e.innerHTML=`<h2>${d.date[lang]}</h2><div class="theme">${d.theme[lang]}</div>${d.stops.map((s,i)=>`<div class="stop"><b>${i+1}. ${s[lang]}</b></div>`).join("")}<div class="route">${lang==="zh"?"路线：":lang==="fa"?"مسیر: ":"Route: "}${d.stops.map(s=>s[lang]).join(" → ")}</div>`;cards.appendChild(e)});
- drawMap();drawFilters();
+:root{
+  --bg:#f7f4ee;--card:#fffdf9;--ink:#1d1b18;--muted:#706a61;
+  --line:#ded7cc;--gold:#b58a46
 }
-function drawMap(){layers.forEach(x=>map.removeLayer(x));layers=[];let all=[];
- DB.days.forEach((d,di)=>{let g=L.layerGroup(),pts=[];d.stops.forEach((s,i)=>{let icon=L.divIcon({className:"",html:`<div style="width:30px;height:30px;border-radius:50%;background:${colors[di]};color:#fff;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font:bold 14px Arial;box-shadow:0 2px 8px #0004">${i+1}</div>`,iconSize:[30,30],iconAnchor:[15,15]});L.marker([s.lat,s.lng],{icon}).bindPopup(`<b>${s[lang]}</b>`).addTo(g);pts.push([s.lat,s.lng]);all.push([s.lat,s.lng])});L.polyline(pts,{color:colors[di],weight:4}).addTo(g);g.addTo(map);layers.push(g)});map.fitBounds(all,{padding:[25,25]})}
-function drawFilters(){filters.innerHTML="";let a=document.createElement("button");a.textContent=lang==="zh"?"全部":lang==="fa"?"همه":"Alle";a.className="active";a.onclick=()=>show(null,a);filters.appendChild(a);DB.days.forEach((d,i)=>{let b=document.createElement("button");b.textContent=d.date[lang].split(" ")[0];b.onclick=()=>show(i,b);filters.appendChild(b)})}
-function show(i,b){document.querySelectorAll(".filters button").forEach(x=>x.classList.remove("active"));b.classList.add("active");let pts=[];layers.forEach((g,n)=>{if(i===null||i===n){g.addTo(map);DB.days[n].stops.forEach(s=>pts.push([s.lat,s.lng]))}else map.removeLayer(g)});map.fitBounds(pts,{padding:[25,25]})}
-document.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{lang=b.dataset.l;document.querySelectorAll("[data-l]").forEach(x=>x.classList.toggle("active",x===b));render()});
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);
+  font-family:Inter,"PingFang SC","Microsoft YaHei",Tahoma,Arial,sans-serif;
+  color:var(--ink)
+}
+body.rtl{direction:rtl}
+header{background:linear-gradient(135deg,#4b342d,#7a4b3f);color:#fff;padding:38px 22px}
+.head{max-width:1200px;margin:auto;display:flex;justify-content:space-between;gap:20px;align-items:center}
+h1{margin:0;font-size:clamp(32px,5vw,58px)}
+#subtitle{opacity:.8;margin-top:8px}
+.langs{display:flex;gap:7px}
+.langs button,.filters button{border:0;border-radius:999px;padding:9px 13px;cursor:pointer}
+.langs button.active{background:#fff;color:#4b342d}
+.langs button{background:#ffffff20;color:#fff}
+main{max-width:1200px;margin:auto;padding:24px 20px}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}
+.cards{display:flex;flex-direction:column;gap:16px}
+.card,.mapbox{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:20px;box-shadow:0 10px 28px #33271912
+}
+.card h2{margin:0}
+.theme{color:var(--muted);margin:4px 0 14px}
+.stop{
+  display:grid;grid-template-columns:minmax(0,1fr) 220px;
+  gap:16px;align-items:center;padding:12px 0;border-top:1px solid var(--line)
+}
+.stop:first-of-type{border-top:0}
+.stop-copy{min-width:0}
+.stop-media{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.stop-media.one{grid-template-columns:1fr}
+.stop-media img{
+  width:100%;height:90px;object-fit:cover;border-radius:11px;
+  border:1px solid var(--line);background:#eee;display:block
+}
+.route{
+  margin-top:12px;background:#f6f1e8;padding:12px;
+  border-left:4px solid var(--gold);border-radius:10px
+}
+.rtl .route{border-left:0;border-right:4px solid var(--gold)}
+.mapbox{position:sticky;top:16px}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.filters button.active{background:#1d1b18;color:#fff}
+#map{height:650px;border-radius:14px}
+@media(max-width:850px){
+  .grid{grid-template-columns:1fr}.mapbox{position:relative}#map{height:450px}
+  .head{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:600px){
+  .stop{grid-template-columns:1fr}
+  .stop-media img{height:150px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="head">
+    <div><h1 id="title"></h1><div id="subtitle"></div></div>
+    <div class="langs">
+      <button data-l="zh" class="active">中文</button>
+      <button data-l="fa">فارسی</button>
+      <button data-l="de">Deutsch</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+    <section id="cards" class="cards"></section>
+    <aside class="mapbox">
+      <div id="filters" class="filters"></div>
+      <div id="map"></div>
+    </aside>
+  </div>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+let DB,lang="zh",layers=[];
+const colors=["#28a9e0","#ff9b42","#7367f0","#59b300","#b064e8"];
+const map=L.map("map");
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+  attribution:"&copy; OpenStreetMap contributors"
+}).addTo(map);
+
+function stopMedia(s){
+  const imgs=(s.images||[]).filter(Boolean).slice(0,2);
+  if(!imgs.length) return "";
+  return `<div class="stop-media ${imgs.length===1?"one":""}">
+    ${imgs.map((src,i)=>`<img src="${escapeAttr(src)}" alt="${escapeAttr(s[lang])} ${i+1}" loading="lazy" onerror="this.style.display='none'">`).join("")}
+  </div>`;
+}
+function escapeAttr(v){
+  return String(v??"").replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;");
+}
+function render(){
+  document.documentElement.lang=lang==="fa"?"fa":lang==="de"?"de":"zh-CN";
+  document.documentElement.dir=lang==="fa"?"rtl":"ltr";
+  document.body.classList.toggle("rtl",lang==="fa");
+  title.textContent=DB.site.title[lang];
+  subtitle.textContent=DB.site.subtitle[lang];
+  cards.innerHTML="";
+  DB.days.forEach((d,di)=>{
+    const e=document.createElement("article");
+    e.className="card";
+    e.innerHTML=`
+      <h2>${escapeAttr(d.date[lang])}</h2>
+      <div class="theme">${escapeAttr(d.theme[lang])}</div>
+      ${d.stops.map((s,i)=>`
+        <div class="stop">
+          <div class="stop-copy"><b>${i+1}. ${escapeAttr(s[lang])}</b></div>
+          ${stopMedia(s)}
+        </div>`).join("")}
+      <div class="route">${lang==="zh"?"路线：":lang==="fa"?"مسیر: ":"Route: "}${d.stops.map(s=>escapeAttr(s[lang])).join(" → ")}</div>`;
+    cards.appendChild(e)
+  });
+  drawMap();
+  drawFilters();
+}
+function drawMap(){
+  layers.forEach(x=>map.removeLayer(x));layers=[];
+  const all=[];
+  DB.days.forEach((d,di)=>{
+    const g=L.layerGroup(),pts=[];
+    d.stops.forEach((s,i)=>{
+      const icon=L.divIcon({
+        className:"",
+        html:`<div style="width:30px;height:30px;border-radius:50%;background:${colors[di]};color:#fff;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font:bold 14px Arial;box-shadow:0 2px 8px #0004">${i+1}</div>`,
+        iconSize:[30,30],iconAnchor:[15,15]
+      });
+      L.marker([s.lat,s.lng],{icon}).bindPopup(`<b>${escapeAttr(s[lang])}</b>`).addTo(g);
+      pts.push([s.lat,s.lng]);all.push([s.lat,s.lng]);
+    });
+    if(pts.length>1)L.polyline(pts,{color:colors[di],weight:4}).addTo(g);
+    g.addTo(map);layers.push(g);
+  });
+  if(all.length)map.fitBounds(all,{padding:[25,25]});
+}
+function drawFilters(){
+  filters.innerHTML="";
+  const a=document.createElement("button");
+  a.textContent=lang==="zh"?"全部":lang==="fa"?"همه":"Alle";
+  a.className="active";a.onclick=()=>show(null,a);filters.appendChild(a);
+  DB.days.forEach((d,i)=>{
+    const b=document.createElement("button");
+    b.textContent=d.date[lang].split(" ")[0];
+    b.onclick=()=>show(i,b);filters.appendChild(b)
+  })
+}
+function show(i,b){
+  document.querySelectorAll(".filters button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  const pts=[];
+  layers.forEach((g,n)=>{
+    if(i===null||i===n){
+      g.addTo(map);DB.days[n].stops.forEach(s=>pts.push([s.lat,s.lng]))
+    }else map.removeLayer(g)
+  });
+  if(pts.length)map.fitBounds(pts,{padding:[25,25]})
+}
+document.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{
+  lang=b.dataset.l;
+  document.querySelectorAll("[data-l]").forEach(x=>x.classList.toggle("active",x===b));
+  render()
+});
+
 fetch("/data/itinerary.json?"+Date.now()).then(r=>r.json()).then(x=>{DB=x;render()});
 
 window.addEventListener("message",(event)=>{
@@ -33,4 +184,6 @@ window.addEventListener("message",(event)=>{
   DB=event.data.payload;
   render();
 });
-</script></body></html>
+</script>
+</body>
+</html>

@@ -7,7 +7,7 @@
 <style>
 :root{
   --bg:#efede8;--panel:#fff;--ink:#202124;--muted:#77716a;--line:#ddd7ce;
-  --brand:#3f2e29;--green:#b9e769;--danger:#fff0ee;
+  --brand:#3f2e29;--green:#b9e769;--danger:#fff0ee;--purple:#7158e8;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -28,85 +28,84 @@ button{
 .primary{background:#fff;color:var(--brand)}
 .save{background:var(--green);color:#1e2b13}
 .ghost{background:#ffffff18;color:#fff}
-.status{font-size:12px;opacity:.85;max-width:220px}
-.workspace{
-  height:calc(100vh - 64px);
-  display:grid;grid-template-columns:minmax(420px,1fr) 430px;
-}
+.status{font-size:12px;opacity:.9;max-width:260px}
+.workspace{height:calc(100vh - 64px);display:grid;grid-template-columns:minmax(420px,1fr) 455px}
 .preview-panel{
   min-width:0;padding:14px;border-right:1px solid var(--line);
-  display:flex;flex-direction:column;gap:10px;
+  display:flex;flex-direction:column;gap:10px
 }
-.preview-head{
-  display:flex;justify-content:space-between;align-items:center;gap:10px;
-  color:var(--muted);font-size:13px;
-}
+.preview-head{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:13px}
 .device-group{display:flex;gap:5px}
 .device-group button{padding:6px 9px;background:#fff;border:1px solid var(--line)}
 .device-group button.active{background:#222;color:#fff}
 .canvas{
   flex:1;min-height:0;background:#d8d4cc;border-radius:16px;padding:14px;
-  display:flex;justify-content:center;align-items:stretch;overflow:hidden;
+  display:flex;justify-content:center;align-items:stretch;overflow:hidden
 }
 .preview-shell{
   width:100%;height:100%;background:#fff;border-radius:12px;
-  overflow:hidden;box-shadow:0 10px 30px #0002;transition:.2s width ease;
+  overflow:hidden;box-shadow:0 10px 30px #0002;transition:.2s width ease
 }
-.preview-shell.tablet{width:820px}
-.preview-shell.mobile{width:390px}
+.preview-shell.tablet{width:820px}.preview-shell.mobile{width:390px}
 iframe{width:100%;height:100%;border:0;background:#fff}
-
-.editor-panel{
-  background:#f8f7f4;overflow:auto;padding:15px;
-}
-.editor-title{
-  display:flex;justify-content:space-between;align-items:center;margin-bottom:12px
-}
-.editor-title h2{font-size:18px;margin:0}
-.hint{font-size:12px;color:var(--muted)}
-
-.day{
-  background:var(--panel);border:1px solid var(--line);border-radius:16px;
-  margin-bottom:12px;overflow:hidden;
-}
-.day-summary{
-  padding:14px;display:flex;justify-content:space-between;align-items:center;
-  cursor:pointer;background:#fff;
-}
-.day-summary strong{font-size:15px}
-.day-summary span{color:var(--muted);font-size:12px}
-.day-body{padding:0 14px 14px}
-.day.collapsed .day-body{display:none}
+.editor-panel{background:#f8f7f4;overflow:auto;padding:15px}
+.editor-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.editor-title h2{font-size:18px;margin:0}.hint{font-size:12px;color:var(--muted)}
+.day{background:var(--panel);border:1px solid var(--line);border-radius:16px;margin-bottom:12px;overflow:hidden}
+.day-summary{padding:14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:#fff}
+.day-summary strong{font-size:15px}.day-summary span{color:var(--muted);font-size:12px}
+.day-body{padding:0 14px 14px}.day.collapsed .day-body{display:none}
 .fields{display:grid;grid-template-columns:1fr;gap:7px;margin-bottom:12px}
 label{font-size:11px;color:var(--muted);display:block;margin-bottom:4px}
 input{
   width:100%;padding:9px 10px;border:1px solid #d7d1c7;border-radius:9px;
-  background:#fff;font:inherit;
+  background:#fff;font:inherit
 }
 .stop-list{display:flex;flex-direction:column;gap:8px}
-.stop-card{
-  border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px;
-}
-.stop-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.stop-card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px}
+.stop-top{display:flex;align-items:center;gap:8px}
 .handle{cursor:grab;font-size:20px;color:#837a70;user-select:none}
 .stop-number{
   width:25px;height:25px;border-radius:50%;background:#eee9ff;color:#684ee8;
-  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900
 }
 .stop-name{flex:1;font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.photo-count{
+  min-width:30px;text-align:center;background:#f3efff;color:#6b50e7;
+  border-radius:999px;padding:5px 7px;font-size:11px;font-weight:900
+}
 .icon-btn{padding:5px 8px;background:#f3f1ed;color:#555}
 .icon-btn.danger{background:var(--danger);color:#b5362e}
-.stop-fields{display:none;grid-template-columns:1fr;gap:7px;padding-top:4px}
+.stop-fields{display:none;grid-template-columns:1fr;gap:8px;padding-top:10px}
 .stop-card.open .stop-fields{display:grid}
 .coords{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.images-editor{
+  border:1px dashed #cfc6ba;border-radius:12px;padding:10px;background:#faf8f4
+}
+.images-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.images-head strong{font-size:12px}
+.image-slots{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.image-slot{
+  border:1px solid var(--line);border-radius:10px;background:#fff;padding:7px;min-width:0
+}
+.image-preview{
+  height:92px;border-radius:8px;background:#efede8;display:flex;align-items:center;
+  justify-content:center;overflow:hidden;color:#999;font-size:11px;margin-bottom:7px
+}
+.image-preview img{width:100%;height:100%;object-fit:cover;display:block}
+.image-actions{display:flex;gap:5px;flex-wrap:wrap}
+.image-actions button{padding:6px 8px;font-size:11px}
+.upload-btn{background:#eee9ff;color:#654bd7}
+.remove-btn{background:#fff0ee;color:#b5362e}
+.url-btn{background:#f1eee9;color:#655d56}
+.file-input{display:none}
 .add{width:100%;margin-top:9px;background:#ece8e1;color:#423a34}
 .publish-note{
   background:#fff8dd;border:1px solid #eadb99;border-radius:12px;padding:10px;
   font-size:12px;line-height:1.5;color:#685c29;margin-bottom:12px
 }
 @media(max-width:1000px){
-  body{overflow:auto}
-  .workspace{height:auto;grid-template-columns:1fr}
+  body{overflow:auto}.workspace{height:auto;grid-template-columns:1fr}
   .preview-panel{height:70vh;border-right:0;border-bottom:1px solid var(--line)}
   .editor-panel{overflow:visible}
 }
@@ -126,7 +125,7 @@ input{
 <div class="workspace">
   <section class="preview-panel">
     <div class="preview-head">
-      <span>实时 Preview — 修改右侧内容后立即更新</span>
+      <span>实时 Preview — 图片上传后会先在这里显示</span>
       <div class="device-group">
         <button class="active" onclick="device('desktop',this)">Desktop</button>
         <button onclick="device('tablet',this)">Tablet</button>
@@ -143,12 +142,12 @@ input{
   <aside class="editor-panel">
     <div class="editor-title">
       <h2>行程内容</h2>
-      <span class="hint">拖动 ☰ 调整顺序</span>
+      <span class="hint">每个地点最多 2 张图片</span>
     </div>
 
     <div class="publish-note">
-      右侧修改只会先更新预览。点击 <b>Save & Publish</b> 后才会写回 GitHub，
-      然后 Netlify 自动重新部署。
+      上传图片后会先进入实时预览。点击 <b>Save & Publish</b> 时，
+      图片会和 <code>itinerary.json</code> 一起写入 GitHub，然后 Netlify 自动部署。
     </div>
 
     <div id="app"></div>
@@ -162,14 +161,21 @@ const preview=document.getElementById("preview");
 async function load(){
   const r=await fetch("/data/itinerary.json?"+Date.now());
   db=await r.json();
+  normalize();
   renderEditor();
   preview.addEventListener("load",sendPreview,{once:true});
 }
+function normalize(){
+  db.days.forEach(day=>day.stops.forEach(stop=>{
+    if(!Array.isArray(stop.images))stop.images=[];
+    stop.images=stop.images.slice(0,2);
+  }));
+}
 function sendPreview(){
-  if(!db) return;
+  if(!db)return;
   preview.contentWindow.postMessage({type:"itinerary-preview",payload:db},"*");
 }
-function changed(){sendPreview();}
+function changed(){sendPreview()}
 
 function renderEditor(){
   app.innerHTML="";
@@ -204,20 +210,45 @@ function triField(label,obj,path){
     <input value="${esc(obj.de)}" oninput="${path}.de=this.value;changed()">
   </div>`;
 }
+function slotHtml(di,si,slot,s){
+  const src=(s.images||[])[slot]||"";
+  const has=!!src;
+  return `<div class="image-slot">
+    <div class="image-preview" id="preview-${di}-${si}-${slot}">
+      ${has?`<img src="${esc(src)}" alt="image ${slot+1}">`:`图片 ${slot+1}`}
+    </div>
+    <div class="image-actions">
+      <button class="upload-btn" onclick="document.getElementById('file-${di}-${si}-${slot}').click()">上传</button>
+      <button class="url-btn" onclick="setImageUrl(${di},${si},${slot})">URL</button>
+      ${has?`<button class="remove-btn" onclick="removeImage(${di},${si},${slot})">删除</button>`:""}
+    </div>
+    <input id="file-${di}-${si}-${slot}" class="file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif"
+      onchange="uploadImage(event,${di},${si},${slot})">
+  </div>`;
+}
 function stopCard(di,si,s){
   const e=document.createElement("div");
   e.className="stop-card";
   e.draggable=true;
   e.dataset.index=si;
+  const count=(s.images||[]).filter(Boolean).length;
   e.innerHTML=`
     <div class="stop-top">
       <div class="handle">☰</div>
       <div class="stop-number">${si+1}</div>
       <div class="stop-name">${esc(s.zh)}</div>
+      <div class="photo-count">📷 ${count}</div>
       <button class="icon-btn" onclick="event.stopPropagation();this.closest('.stop-card').classList.toggle('open')">Edit</button>
       <button class="icon-btn danger" onclick="event.stopPropagation();delStop(${di},${si})">×</button>
     </div>
     <div class="stop-fields">
+      <div class="images-editor">
+        <div class="images-head"><strong>地点图片</strong><span>最多 2 张</span></div>
+        <div class="image-slots">
+          ${slotHtml(di,si,0,s)}
+          ${slotHtml(di,si,1,s)}
+        </div>
+      </div>
       <div><label>中文</label><input value="${esc(s.zh)}" oninput="db.days[${di}].stops[${si}].zh=this.value;this.closest('.stop-card').querySelector('.stop-name').textContent=this.value;changed()"></div>
       <div><label>فارسی</label><input value="${esc(s.fa)}" oninput="db.days[${di}].stops[${si}].fa=this.value;changed()"></div>
       <div><label>Deutsch</label><input value="${esc(s.de)}" oninput="db.days[${di}].stops[${si}].de=this.value;changed()"></div>
@@ -234,19 +265,93 @@ function stopCard(di,si,s){
   e.ondrop=ev=>{
     ev.preventDefault();
     const from=+ev.dataTransfer.getData("text/plain"),to=si;
-    if(from===to) return;
+    if(from===to)return;
     const moved=db.days[di].stops.splice(from,1)[0];
     db.days[di].stops.splice(to,0,moved);
     renderEditor();changed();
   };
   return e;
 }
+async function uploadImage(event,di,si,slot){
+  const file=event.target.files?.[0];
+  if(!file)return;
+  if(file.size>6*1024*1024){
+    alert("单张图片请控制在 6MB 以内。");
+    event.target.value="";
+    return;
+  }
+  try{
+    status.textContent="Processing image…";
+    const dataUrl=await resizeImage(file,1600,0.84);
+    const stop=db.days[di].stops[si];
+    if(!Array.isArray(stop.images))stop.images=[];
+    while(stop.images.length<=slot)stop.images.push("");
+    stop.images[slot]=dataUrl;
+    trimImages(stop);
+    renderEditor();changed();
+    // reopen the same stop after rerender
+    document.querySelectorAll(".day")[di]?.querySelectorAll(".stop-card")[si]?.classList.add("open");
+    status.textContent="Image ready ✓";
+    setTimeout(()=>status.textContent="",1500);
+  }catch(err){
+    console.error(err);
+    status.textContent="Image error";
+    alert("图片处理失败，请换一张 JPG / PNG / WebP。");
+  }
+}
+function resizeImage(file,maxSide,quality){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onerror=reject;
+    reader.onload=()=>{
+      const img=new Image();
+      img.onerror=reject;
+      img.onload=()=>{
+        const scale=Math.min(1,maxSide/Math.max(img.width,img.height));
+        const w=Math.max(1,Math.round(img.width*scale));
+        const h=Math.max(1,Math.round(img.height*scale));
+        const canvas=document.createElement("canvas");
+        canvas.width=w;canvas.height=h;
+        const ctx=canvas.getContext("2d");
+        ctx.drawImage(img,0,0,w,h);
+        const mime=file.type==="image/png"?"image/png":"image/jpeg";
+        resolve(canvas.toDataURL(mime,mime==="image/png"?undefined:quality));
+      };
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function setImageUrl(di,si,slot){
+  const current=db.days[di].stops[si].images?.[slot]||"";
+  const value=prompt("输入图片 URL（https://...）", current.startsWith("data:")?"":current);
+  if(value===null)return;
+  const stop=db.days[di].stops[si];
+  if(!Array.isArray(stop.images))stop.images=[];
+  while(stop.images.length<=slot)stop.images.push("");
+  stop.images[slot]=value.trim();
+  trimImages(stop);
+  renderEditor();changed();
+  document.querySelectorAll(".day")[di]?.querySelectorAll(".stop-card")[si]?.classList.add("open");
+}
+function removeImage(di,si,slot){
+  const stop=db.days[di].stops[si];
+  if(!Array.isArray(stop.images))return;
+  stop.images[slot]="";
+  trimImages(stop);
+  renderEditor();changed();
+  document.querySelectorAll(".day")[di]?.querySelectorAll(".stop-card")[si]?.classList.add("open");
+}
+function trimImages(stop){
+  stop.images=(stop.images||[]).slice(0,2);
+  while(stop.images.length && !stop.images[stop.images.length-1])stop.images.pop();
+}
 function addStop(di){
-  db.days[di].stops.push({zh:"新地点",fa:"مکان جدید",de:"Neuer Ort",lat:39.9042,lng:116.4074});
+  db.days[di].stops.push({zh:"新地点",fa:"مکان جدید",de:"Neuer Ort",lat:39.9042,lng:116.4074,images:[]});
   renderEditor();changed();
 }
 function delStop(di,si){
-  if(!confirm("删除这个地点？")) return;
+  if(!confirm("删除这个地点？"))return;
   db.days[di].stops.splice(si,1);
   renderEditor();changed();
 }
@@ -260,14 +365,15 @@ function device(type,btn){
 }
 function openSite(){window.open("/","_blank")}
 async function reloadFromGitHub(){
-  if(!confirm("放弃当前未保存修改并重新读取 GitHub / Netlify 上的版本？")) return;
+  if(!confirm("放弃当前未保存修改并重新读取线上版本？"))return;
   status.textContent="Reloading…";
   await load();
   status.textContent="Reloaded";
   setTimeout(()=>status.textContent="",1800);
 }
 async function publish(){
-  status.textContent="Saving…";
+  normalize();
+  status.textContent="Uploading images & saving…";
   const r=await fetch("/.netlify/functions/save-itinerary",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
@@ -275,7 +381,9 @@ async function publish(){
   });
   const x=await r.json().catch(()=>({}));
   if(r.ok){
-    status.textContent="Saved ✓ Netlify deploying…";
+    if(x.itinerary) db=x.itinerary;
+    renderEditor();changed();
+    status.textContent=`Saved ✓ ${x.uploadedImages||0} image(s) uploaded. Netlify deploying…`;
   }else{
     status.textContent="Error: "+(x.error||r.status);
   }
